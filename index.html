@@ -128,6 +128,21 @@
       }
       f1();
     };
+
+    errorBtns[14].onclick = function () {
+
+      try {
+        const badCode = "const s;";
+        eval(badCode);
+      } catch (err) {
+        console.log("Unfortunately, an error occurred");
+        console.error(err);
+      } finally {
+        console.log("Finally");
+      }
+      
+    };
+
   </script>
 </body>
 
