@@ -87,6 +87,15 @@
     </section>
   </main>
 
+  <!-- TrackJS source script -->
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({
+      token: "a092b157aa984abd876b2bc0abda0f73"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -103,9 +112,11 @@
     // Start your code here
     // You may move this JS to another file if you wish
 
-    let number = 3;
-    let errMsg = "the number is odd";
+    // some vars to use in console.assert
+    const number = 3;
+    const errMsg = "the number is odd";
 
+    // add error button functionality
     errorBtns[0].onclick = function () { console.log('Console Log Demo') };
     errorBtns[1].onclick = function () { console.error('Console Error Demo') };
     errorBtns[2].onclick = function () { console.count('Count Button Clicks') };
@@ -129,20 +140,33 @@
       f1();
     };
 
+    // throw global error button
     errorBtns[14].onclick = function () {
-
+      const numToSquare = 2;
       try {
-        const badCode = "const s;";
-        eval(badCode);
+        numToSquare = numToSquare * numToSquare;
       } catch (err) {
-        console.log("Unfortunately, an error occurred");
-        console.error(err);
+        if (numToSquare == 2)
+          throw new NumNotChangedError("Your number stayed the same: it's still " + numToSquare + " :(");
       } finally {
-        console.log("Finally");
+        console.log("An error might have just been thrown ( or maybe not :O )");
       }
-      
     };
 
+    // custom error to throw
+    class NumNotChangedError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "NumNotChangedError";
+      }
+    }
+
+    // use window.onerror to get and log errors with TrackJS
+    window.onerror = function (err) {
+      console.log("Looks like we found an error using window.onerror!");
+      TrackJS.track(err);
+      return false;
+    }
   </script>
 </body>
 
